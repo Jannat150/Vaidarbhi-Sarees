@@ -73,7 +73,7 @@ const Contact = () => {
 
                   <div>
                     <h3 className="font-semibold text-lg">
-                      Address
+                      Address 
                     </h3>
 
                     <p className="text-gray-600">
