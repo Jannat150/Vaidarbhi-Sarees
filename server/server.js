@@ -18,9 +18,14 @@ connectDB();
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://vaidarbhi-sarees-vu93.vercel.app"
+];
+
 app.use(cors({
-  origin: true,
-  credentials: true
+  origin: allowedOrigins,
+  credentials : true
 }));
 app.use(express.json());
 
