@@ -20,7 +20,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://vaidarbhi-sarees-vu93.vercel.app",
+  "https://magenta-cucurucho-a36c54.netlify.app",
   "https://vaidarbhi-sarees-xm7d.vercel.app"
 ];
 
