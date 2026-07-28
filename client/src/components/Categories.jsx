@@ -14,7 +14,7 @@ const categories = [
       "https://tse3.mm.bing.net/th/id/OIP.DfSHyM23JjTzqesEQyoK5AHaKd?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
   },
   {
-    name: "Banarasi",
+    name: "Banarasi Sarees",
     image:
       "https://media.urbanwomania.com/wp-content/uploads/2023/05/Japanese-Violet-Banarasi-Saree.webp",
   },
