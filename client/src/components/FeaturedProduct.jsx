@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../services/axios";
 import ProductCard from "./ProductCard";
 
 const FeaturedProducts = () => {
@@ -11,9 +11,7 @@ const FeaturedProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get(
-        "http://localhost:5000/api/products/featured"
-      );
+      const { data } = await API.get("/products/featured");
 
       setProducts(data);
     } catch (error) {
