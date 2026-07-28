@@ -42,7 +42,7 @@ const Hero = () => {
               onClick={() => navigate("/collections")}
               className="border-2 border-[#8B1E3F] text-[#8B1E3F] hover:bg-[#8B1E3F] hover:text-white px-8 py-4 rounded-full transition-all duration-300"
             >
-              Explore Collection
+              Explore Collection 
             </button>
 
           </div>
