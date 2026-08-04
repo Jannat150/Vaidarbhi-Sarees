@@ -1,18 +1,22 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   FiSearch,
   FiHeart,
   FiShoppingCart,
   FiUser,
+  FiMenu,
+  FiX,
 } from "react-icons/fi";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import logo from "../assets/logo.jpeg";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -23,65 +27,92 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  const navClass = ({ isActive }) =>
+    isActive
+      ? "text-[#8B1E3F] font-semibold"
+      : "hover:text-[#8B1E3F] transition";
+
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <header className="sticky top-0 z-50 bg-white shadow-md border-b">
+      <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
 
         {/* Logo */}
-        <Link to="/" className="flex flex-col">
-          <span className="text-3xl font-bold text-[#8B1E3F]">
-            Vaidarbhi
-          </span>
+        <Link to="/" className="flex items-center gap-3">
 
-          <span className="text-sm tracking-[3px] text-[#C9A227] uppercase">
-            Sarees
-          </span>
+          <img
+            src={logo}
+            alt="Vaidarbhi Sarees"
+            className="w-14 h-14 object-contain"
+          />
+
+          <div>
+            <h1 className="text-2xl font-bold text-[#8B1E3F]">
+              Vaidarbhi
+            </h1>
+
+            <p className="text-xs uppercase tracking-[4px] text-[#C9A227]">
+              Sarees
+            </p>
+          </div>
+
         </Link>
 
-        {/* Navigation */}
-        <nav className="hidden lg:flex items-center gap-8 font-medium">
-          <Link to="/" className="hover:text-[#8B1E3F]">
+        {/* Desktop Menu */}
+        <nav className="hidden lg:flex items-center gap-8 text-[16px]">
+
+          <NavLink to="/" className={navClass}>
             Home
-          </Link>
+          </NavLink>
 
-          <Link to="/shop" className="hover:text-[#8B1E3F]">
+          <NavLink to="/products" className={navClass}>
             Shop
-          </Link>
+          </NavLink>
 
-          <Link to="/about" className="hover:text-[#8B1E3F]">
+          <NavLink to="/about" className={navClass}>
             About
-          </Link>
+          </NavLink>
 
-          <Link to="/contact" className="hover:text-[#8B1E3F]">
+          <NavLink to="/contact" className={navClass}>
             Contact
-          </Link>
+          </NavLink>
+
         </nav>
 
-        {/* Icons */}
+        {/* Right Icons */}
         <div className="flex items-center gap-5 text-2xl">
 
-          <FiSearch className="cursor-pointer hover:text-[#8B1E3F]" />
+          <button className="hover:text-[#8B1E3F]">
+            <FiSearch />
+          </button>
 
           <Link to="/wishlist">
-            <FiHeart className="cursor-pointer hover:text-[#8B1E3F]" />
+            <FiHeart className="hover:text-[#8B1E3F]" />
           </Link>
 
           <Link to="/cart">
-            <FiShoppingCart className="cursor-pointer hover:text-[#8B1E3F]" />
+            <FiShoppingCart className="hover:text-[#8B1E3F]" />
           </Link>
 
-          {/* User Menu */}
+          {/* User */}
           {user ? (
             <div className="relative">
+
               <button
                 onClick={() => setOpen(!open)}
-                className="cursor-pointer"
+                className="hover:text-[#8B1E3F]"
               >
-                <FiUser className="hover:text-[#8B1E3F]" />
+                <FiUser />
               </button>
 
               {open && (
-                <div className="absolute right-0 mt-3 w-48 bg-white shadow-lg rounded-xl border overflow-hidden z-50">
+                <div className="absolute right-0 mt-4 w-56 bg-white rounded-xl shadow-xl border overflow-hidden">
+
+                  <div className="px-4 py-3 border-b">
+                    <p className="font-semibold">{user.name}</p>
+                    <p className="text-sm text-gray-500">
+                      {user.email}
+                    </p>
+                  </div>
 
                   <Link
                     to="/profile"
@@ -92,12 +123,20 @@ const Navbar = () => {
                   </Link>
 
                   <Link
-  to="/myorders"
-  onClick={() => setOpen(false)}
-  className="block px-4 py-3 hover:bg-gray-100"
->
-  📦 My Orders
-</Link>
+                    to="/myorders"
+                    onClick={() => setOpen(false)}
+                    className="block px-4 py-3 hover:bg-gray-100"
+                  >
+                    📦 My Orders
+                  </Link>
+
+                  <Link
+                    to="/wishlist"
+                    onClick={() => setOpen(false)}
+                    className="block px-4 py-3 hover:bg-gray-100"
+                  >
+                    ❤️ Wishlist
+                  </Link>
 
                   {user.role === "admin" && (
                     <Link
@@ -113,20 +152,99 @@ const Navbar = () => {
                     onClick={handleLogout}
                     className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50"
                   >
-                    🔓 Logout
+                    🚪 Logout
                   </button>
 
                 </div>
               )}
+
             </div>
           ) : (
             <Link to="/login">
-              <FiUser className="cursor-pointer hover:text-[#8B1E3F]" />
+              <FiUser className="hover:text-[#8B1E3F]" />
             </Link>
           )}
 
+          {/* Mobile Menu */}
+          <button
+            className="lg:hidden"
+            onClick={() => setMobileMenu(!mobileMenu)}
+          >
+            {mobileMenu ? <FiX /> : <FiMenu />}
+          </button>
+
         </div>
+
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenu && (
+        <div className="lg:hidden bg-white border-t">
+
+          <NavLink
+            to="/"
+            className="block px-6 py-4 hover:bg-gray-100"
+            onClick={() => setMobileMenu(false)}
+          >
+            Home
+          </NavLink>
+
+          <NavLink
+            to="/products"
+            className="block px-6 py-4 hover:bg-gray-100"
+            onClick={() => setMobileMenu(false)}
+          >
+            Shop
+          </NavLink>
+
+          <NavLink
+            to="/about"
+            className="block px-6 py-4 hover:bg-gray-100"
+            onClick={() => setMobileMenu(false)}
+          >
+            About
+          </NavLink>
+
+          <NavLink
+            to="/contact"
+            className="block px-6 py-4 hover:bg-gray-100"
+            onClick={() => setMobileMenu(false)}
+          >
+            Contact
+          </NavLink>
+
+          {user && (
+            <>
+              <NavLink
+                to="/profile"
+                className="block px-6 py-4 hover:bg-gray-100"
+                onClick={() => setMobileMenu(false)}
+              >
+                My Profile
+              </NavLink>
+
+              <NavLink
+                to="/myorders"
+                className="block px-6 py-4 hover:bg-gray-100"
+                onClick={() => setMobileMenu(false)}
+              >
+                My Orders
+              </NavLink>
+
+              {user.role === "admin" && (
+                <NavLink
+                  to="/admin"
+                  className="block px-6 py-4 hover:bg-gray-100"
+                  onClick={() => setMobileMenu(false)}
+                >
+                  Admin Dashboard
+                </NavLink>
+              )}
+            </>
+          )}
+
+        </div>
+      )}
     </header>
   );
 };
