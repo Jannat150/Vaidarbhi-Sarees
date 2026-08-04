@@ -23,6 +23,7 @@ import ReturnRefundPolicy from "./pages/ReturnRefund";
 import TermsAndConditions from "./pages/TermsCondition";
 import FAQs from "./pages/FAQ";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Wishlist from "./pages/Wishlist";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -45,6 +46,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/about" element={<About />} />
         <Route path="/shop" element={<Products />} />
+        <Route path="/products" element={<Products />} />
         <Route path="/admin/products/add" element={<AddProduct />} />
         <Route path="/product/:slug" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
@@ -61,6 +63,7 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path="/faqs" element={<FAQs />} />
+        <Route path="/wishlist" element={<Wishlist />} />
       </Routes>
     </>
   );

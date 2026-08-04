@@ -27,6 +27,16 @@ const ProductDetails = () => {
     fetchProduct();
   }, [slug]);
 
+  const addToWishlist = async () => {
+    try {
+      await API.post("/wishlist", { productId: product._id });
+      alert("Added to wishlist");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add to wishlist");
+    }
+  };
+
   const addToCart = () => {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -133,12 +143,21 @@ const ProductDetails = () => {
               )}
             </div>
 
-            <button
-              onClick={addToCart}
-              className="mt-10 bg-[#8B1E3F] hover:bg-[#6f1732] text-white px-8 py-4 rounded-xl transition"
-            >
-              Add To Cart
-            </button>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <button
+                onClick={addToCart}
+                className="bg-[#8B1E3F] hover:bg-[#6f1732] text-white px-8 py-4 rounded-xl transition"
+              >
+                Add To Cart
+              </button>
+
+              <button
+                onClick={addToWishlist}
+                className="border border-[#8B1E3F] text-[#8B1E3F] px-8 py-4 rounded-xl hover:bg-[#8B1E3F] hover:text-white transition"
+              >
+                Add To Wishlist
+              </button>
+            </div>
 
           </div>
 

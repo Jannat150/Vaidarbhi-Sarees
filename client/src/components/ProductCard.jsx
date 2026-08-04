@@ -1,6 +1,24 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
+import API from "../services/axios";
 
 const ProductCard = ({ product }) => {
+  const [loading, setLoading] = useState(false);
+
+  const addToWishlist = async () => {
+    try {
+      setLoading(true);
+      await API.post("/wishlist", { productId: product._id });
+      alert("Added to wishlist");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add to wishlist");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-white rounded-3xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden group">
       <div className="overflow-hidden">
@@ -29,12 +47,19 @@ const ProductCard = ({ product }) => {
         </div>
 
         <div className="flex justify-between mt-6">
-          <button className="bg-[#8B1E3F] text-white px-4 py-2 rounded-full flex items-center gap-2">
+          <Link
+            to={`/product/${product.slug}`}
+            className="bg-[#8B1E3F] text-white px-4 py-2 rounded-full flex items-center gap-2 hover:bg-[#6f1732]"
+          >
             <FiShoppingCart />
             Cart
-          </button>
+          </Link>
 
-          <button className="border border-[#8B1E3F] p-3 rounded-full">
+          <button
+            onClick={addToWishlist}
+            disabled={loading}
+            className="border border-[#8B1E3F] p-3 rounded-full disabled:opacity-60 hover:bg-[#8B1E3F] hover:text-white transition"
+          >
             <FiHeart />
           </button>
         </div>
