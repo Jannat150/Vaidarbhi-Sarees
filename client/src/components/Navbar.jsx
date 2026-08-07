@@ -8,7 +8,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { useState } from "react";
-import { useAuth } from "../context/Authcontext";
+import { useAuth } from "../context/AuthContext";
 import logo from "../assets/logo.jpeg";
 
 const Navbar = () => {

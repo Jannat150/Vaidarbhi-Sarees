@@ -4,7 +4,7 @@ import FeaturedProducts from "../components/FeaturedProduct";
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
-import { useAuth } from "../context/Authcontext";
+import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
   const { user } = useAuth();
