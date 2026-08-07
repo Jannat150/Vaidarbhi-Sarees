@@ -11,7 +11,7 @@ import {
 } from "react-icons/fi";
 
 import { Link } from "react-router-dom";
-import logo from "../assets/Logo.jpeg";
+import logo from "../assets/logo.jpeg";
 
 const Footer = () => {
   return (
