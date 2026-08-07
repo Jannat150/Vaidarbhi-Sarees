@@ -120,7 +120,7 @@ const EditProduct = () => {
       <div className="max-w-6xl mx-auto py-10 px-6">
 
         <h1 className="text-4xl font-bold text-[#8B1E3F] mb-8">
-          Edit Product
+          Edit Product 
         </h1>
 
         <form
