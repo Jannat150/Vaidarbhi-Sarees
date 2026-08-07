@@ -62,7 +62,7 @@ const ShippingPolicy = () => {
             <p className="text-gray-700 leading-8">
               • Free Shipping on orders above <strong>₹999</strong>.
               <br />
-              • A flat shipping charge of <strong>₹99</strong> applies to
+              • A flat shipping charge upto <strong>₹99</strong> applies to
               orders below ₹999.
             </p>
           </div>

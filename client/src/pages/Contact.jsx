@@ -55,39 +55,20 @@ const Contact = () => {
             about our sarees or your orders.
           </p>
 
-          <div className="grid lg:grid-cols-2 gap-10">
+          <div className="grid lg:grid-cols-2 gap-10 items-start">
 
             {/* Contact Info */}
-            <div className="bg-white rounded-3xl shadow-lg p-8">
+            <div className="bg-white rounded-3xl shadow-lg p-6 lg:p-7 self-start">
 
-              <h2 className="text-3xl font-bold text-[#8B1E3F] mb-8">
+              <h2 className="text-3xl font-bold text-[#8B1E3F] mb-5">
                 Get In Touch
               </h2>
 
-              <div className="space-y-7">
+              <div className="space-y-5">
 
-                <div className="flex gap-5">
-                  <div className="bg-[#8B1E3F] text-white p-4 rounded-full h-fit">
-                    <FiMapPin size={22} />
-                  </div>
 
-                  <div>
-                    <h3 className="font-semibold text-lg">
-                      Address 
-                    </h3>
-
-                    <p className="text-gray-600">
-                      Vaidarbhi Sarees
-                      <br />
-                      Amritsar, Punjab
-                      <br />
-                      India
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-5">
-                  <div className="bg-[#8B1E3F] text-white p-4 rounded-full h-fit">
+                <div className="flex gap-4">
+                  <div className="bg-[#8B1E3F] text-white p-3 rounded-full h-fit">
                     <FiPhone size={22} />
                   </div>
 
@@ -102,8 +83,8 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-5">
-                  <div className="bg-[#8B1E3F] text-white p-4 rounded-full h-fit">
+                <div className="flex gap-4">
+                  <div className="bg-[#8B1E3F] text-white p-3 rounded-full h-fit">
                     <FiMail size={22} />
                   </div>
 
@@ -118,8 +99,8 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-5">
-                  <div className="bg-[#8B1E3F] text-white p-4 rounded-full h-fit">
+                <div className="flex gap-4">
+                  <div className="bg-[#8B1E3F] text-white p-3 rounded-full h-fit">
                     <FiClock size={22} />
                   </div>
 
@@ -138,9 +119,9 @@ const Contact = () => {
 
               </div>
 
-              <div className="mt-10">
+              <div className="mt-8">
 
-                <h3 className="font-semibold text-xl mb-4">
+                <h3 className="font-semibold text-xl mb-3">
                   Follow Us
                 </h3>
 
@@ -232,16 +213,6 @@ const Contact = () => {
           </div>
 
           {/* Google Map */}
-          <div className="mt-16 bg-white rounded-3xl shadow-lg overflow-hidden">
-
-            <iframe
-              title="Google Map"
-              src="https://www.google.com/maps?q=Amritsar,Punjab&output=embed"
-              className="w-full h-[450px]"
-              loading="lazy"
-            ></iframe>
-
-          </div>
 
         </div>
 
