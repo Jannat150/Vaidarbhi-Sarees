@@ -51,7 +51,7 @@ const About = () => {
 
             <div className="flex justify-center">
 
-              <div className="bg-black rounded-3xl p-8 shadow-2xl">
+              <div className=" rounded-3xl p-8 shadow-2xl">
 
                 <img
                   src={logo}
@@ -148,7 +148,7 @@ const About = () => {
               <img
                 src={logo}
                 alt="Vaidarbhi"
-                className="w-96 rounded-3xl shadow-2xl bg-black p-8"
+                className="w-96 rounded-3xl shadow-2xl p-8"
               />
 
             </div>

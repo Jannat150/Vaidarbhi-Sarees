@@ -11,7 +11,7 @@ import {
 } from "react-icons/fi";
 
 import { Link } from "react-router-dom";
-import logo from "../assets/logo.jpeg";
+import logo from "../assets/Logo.jpeg";
 
 const Footer = () => {
   return (
@@ -30,7 +30,7 @@ const Footer = () => {
               <img
                 src={logo}
                 alt="Vaidarbhi Sarees"
-                className="w-40 bg-black rounded-2xl p-2 shadow-lg"
+                className="w-40 rounded-2xl p-2 shadow-lg"
               />
 
             </Link>
