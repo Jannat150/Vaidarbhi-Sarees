@@ -7,6 +7,8 @@ import {
   updateOrderStatus,
   getOrderStats,
   cancelOrder,
+  createRazorpayOrder,
+  verifyRazorpayPayment,
 } from "../controllers/orderController.js";
 
 import { protect } from "../middleware/auth.js";
@@ -16,6 +18,8 @@ const router = express.Router();
 
 // User
 router.post("/", protect, createOrder);
+router.post("/razorpay", protect, createRazorpayOrder);
+router.post("/verify", protect, verifyRazorpayPayment);
 router.get("/myorders", protect, getMyOrders);
 
 // Admin
