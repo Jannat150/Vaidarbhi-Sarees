@@ -21,14 +21,29 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:3000",
   "https://magenta-cucurucho-a36c54.netlify.app",
   "https://vaidarbhi-sarees-xm7d.vercel.app",
   "https://whimsical-conkies-b12491.netlify.app",
 ];
 
+if (process.env.CLIENT_URL) {
+  allowedOrigins.push(process.env.CLIENT_URL);
+}
+
 app.use(cors({
-  origin: allowedOrigins,
-  credentials : true
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.endsWith(".netlify.app") ||
+      origin.endsWith(".vercel.app")
+    ) {
+      return callback(null, true);
+    }
+    return callback(null, true);
+  },
+  credentials: true
 }));
 app.use(express.json());
 

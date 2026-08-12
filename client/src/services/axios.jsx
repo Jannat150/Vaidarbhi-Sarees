@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://vaidarbhi-sarees-2.onrender.com/api",
+  baseURL: import.meta.env.VITE_BACKEND_URL || "https://vaidarbhi-sarees-2.onrender.com/api",
 });
 
 API.interceptors.request.use(
