@@ -5,7 +5,6 @@ import {
   FiYoutube,
   FiMail,
   FiPhone,
-  FiMapPin,
   FiHeart,
   FiShoppingBag,
 } from "react-icons/fi";
@@ -210,15 +209,6 @@ const Footer = () => {
             </h3>
 
             <div className="space-y-5 text-gray-400">
-
-              <div className="flex items-start gap-3">
-                <FiMapPin className="mt-1 text-[#C9A227]" />
-                <span>
-                  Amritsar,
-                  <br />
-                  Punjab, India
-                </span>
-              </div>
 
               <a
                 href="tel:+919876543210"

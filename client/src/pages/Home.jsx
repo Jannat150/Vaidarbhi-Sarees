@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
+import Carousel from "../components/Carousel";
 
 const Home = () => {
   const { user } = useAuth();
@@ -39,7 +40,7 @@ const Home = () => {
       )}
 
       <Hero />
-      <Categories />
+      <Carousel/>
       <FeaturedProducts />
       <Footer />
     </>

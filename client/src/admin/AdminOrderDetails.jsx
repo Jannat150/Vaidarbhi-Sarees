@@ -85,14 +85,13 @@ const AdminOrderDetails = () => {
               Shipping Address
             </h3>
 
-            <p>{order.shippingAddress.name}</p>
-            <p>{order.shippingAddress.address}</p>
+            <p>{order.shippingAddress?.line1}</p>
             <p>
-              {order.shippingAddress.city},{" "}
-              {order.shippingAddress.state}
+              {order.shippingAddress?.city},{" "}
+              {order.shippingAddress?.state}
             </p>
-            <p>{order.shippingAddress.pincode}</p>
-            <p>{order.shippingAddress.phone}</p>
+            <p>{order.shippingAddress?.pincode}</p>
+            <p>{order.shippingAddress?.phone}</p>
 
           </div>
 

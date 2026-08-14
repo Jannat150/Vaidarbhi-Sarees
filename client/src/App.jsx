@@ -12,12 +12,15 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import AdminDashboard from "./admin/AdminDashboard";
+import AdminOrders from "./admin/AdminOrders";
 import UserOrders from "./admin/UserOrders";
 import AdminOrderDetails from "./admin/AdminOrderDetails";
+import AdminContacts from "./admin/AdminContacts";
 import ManageProducts from "./pages/ManageProducts";
 import EditProduct from "./admin/EditProduct";
 import Contact from "./pages/Contact";
 import MyOrders from "./pages/MyOrders";
+import MyMessages from "./pages/MyMessages";
 import ShippingPolicy from "./pages/ShippingPolicy";
 import ReturnRefundPolicy from "./pages/ReturnRefund";
 import TermsAndConditions from "./pages/TermsCondition";
@@ -51,13 +54,16 @@ function App() {
         <Route path="/product/:slug" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/users/:id" element={<UserOrders />} />
-        <Route path="/admin/orders/:id" element={<AdminOrderDetails />} />
-        <Route path="/admin/products" element={<ManageProducts />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin/orders" element={<AdminOrders />} />
+      <Route path="/admin/users/:id" element={<UserOrders />} />
+      <Route path="/admin/orders/:id" element={<AdminOrderDetails />} />
+      <Route path="/admin/contacts" element={<AdminContacts />} />
+      <Route path="/admin/products" element={<ManageProducts />} />
         <Route path="/admin/products/edit/:id" element={<EditProduct />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/myorders" element={<MyOrders />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/myorders" element={<MyOrders />} />
+      <Route path="/mymessages" element={<MyMessages />} />
         <Route path="/shipping-policy" element={<ShippingPolicy />} />
         <Route path="/return-refund-policy" element={<ReturnRefundPolicy />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />

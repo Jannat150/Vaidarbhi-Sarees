@@ -114,8 +114,6 @@ const ManageProducts = () => {
 
                     <th>Discount</th>
 
-                    <th>Stock</th>
-
                     <th>Featured</th>
 
                     <th>Actions</th>
@@ -156,20 +154,6 @@ const ManageProducts = () => {
                         {product.discountPrice
                           ? `₹${product.discountPrice}`
                           : "-"}
-
-                      </td>
-
-                      <td>
-
-                        {product.stock > 0 ? (
-                          <span className="text-green-600 font-semibold">
-                            {product.stock}
-                          </span>
-                        ) : (
-                          <span className="text-red-600 font-semibold">
-                            Out of Stock
-                          </span>
-                        )}
 
                       </td>
 

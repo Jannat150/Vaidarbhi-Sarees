@@ -3,22 +3,38 @@ import API from "../services/axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+const emptyAddress = {
+  label: "Home",
+  line1: "",
+  line2: "",
+  city: "",
+  state: "",
+  pincode: "",
+  phone: "",
+  isDefault: false,
+};
+
 const Profile = () => {
   const [user, setUser] = useState({
     addresses: [],
   });
 
   const [orders, setOrders] = useState([]);
-
   const [loading, setLoading] = useState(true);
-
-  const [editing, setEditing] = useState(false);
+  const [editingProfile, setEditingProfile] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     password: "",
   });
+
+  const [addressForm, setAddressForm] = useState({ ...emptyAddress });
+  const [editingAddressId, setEditingAddressId] = useState(null);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [addressLoading, setAddressLoading] = useState(false);
+  const [profileMessage, setProfileMessage] = useState("");
+  const [addressMessage, setAddressMessage] = useState("");
 
   useEffect(() => {
     fetchProfile();
@@ -55,14 +71,18 @@ const Profile = () => {
     }
   };
 
-  const handleChange = (e) => {
+  const handleProfileChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    setProfileMessage("");
   };
 
-  const updateProfile = async () => {
+  const updateProfile = async (e) => {
+    e.preventDefault();
+    setProfileMessage("");
+
     try {
       const { data } = await API.put("/users/profile", formData);
 
@@ -71,12 +91,110 @@ const Profile = () => {
         ...data,
       });
 
-      setEditing(false);
-
-      alert("Profile Updated Successfully");
+      setEditingProfile(false);
+      setFormData({
+        ...data,
+        password: "",
+      });
+      setProfileMessage("Profile updated successfully");
     } catch (err) {
-      alert(err.response?.data?.message || "Something went wrong");
+      setProfileMessage(err.response?.data?.message || "Something went wrong");
     }
+  };
+
+  const handleAddressChange = (e) => {
+    setAddressForm({
+      ...addressForm,
+      [e.target.name]: e.target.value,
+    });
+    setAddressMessage("");
+  };
+
+  const handleAddressSubmit = async (e) => {
+    e.preventDefault();
+    setAddressMessage("");
+
+    if (!addressForm.line1 || !addressForm.city || !addressForm.state || !addressForm.pincode || !addressForm.phone) {
+      setAddressMessage("Please fill all required fields");
+      return;
+    }
+
+    try {
+      setAddressLoading(true);
+
+      if (editingAddressId) {
+        const { data } = await API.put(`/users/addresses/${editingAddressId}`, addressForm);
+        setUser({
+          ...user,
+          addresses: data,
+        });
+        setAddressMessage("Address updated successfully");
+      } else {
+        const { data } = await API.post("/users/addresses", addressForm);
+        setUser({
+          ...user,
+          addresses: data,
+        });
+        setAddressMessage("Address added successfully");
+      }
+
+      setAddressForm({ ...emptyAddress });
+      setEditingAddressId(null);
+      setShowAddressForm(false);
+    } catch (err) {
+      setAddressMessage(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setAddressLoading(false);
+    }
+  };
+
+  const handleEditAddress = (address) => {
+    setAddressForm({
+      label: address.label || "Home",
+      line1: address.line1 || "",
+      line2: address.line2 || "",
+      city: address.city || "",
+      state: address.state || "",
+      pincode: address.pincode || "",
+      phone: address.phone || "",
+      isDefault: address.isDefault || false,
+    });
+    setEditingAddressId(address._id);
+    setShowAddressForm(true);
+    setAddressMessage("");
+  };
+
+  const handleDeleteAddress = async (addressId) => {
+    if (!window.confirm("Are you sure you want to delete this address?")) return;
+
+    try {
+      const { data } = await API.delete(`/users/addresses/${addressId}`);
+      setUser({
+        ...user,
+        addresses: data,
+      });
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete address");
+    }
+  };
+
+  const handleSetDefault = async (addressId) => {
+    try {
+      const { data } = await API.put(`/users/addresses/${addressId}/default`);
+      setUser({
+        ...user,
+        addresses: data,
+      });
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to set default address");
+    }
+  };
+
+  const cancelAddressForm = () => {
+    setAddressForm({ ...emptyAddress });
+    setEditingAddressId(null);
+    setShowAddressForm(false);
+    setAddressMessage("");
   };
 
   if (loading) {
@@ -109,24 +227,27 @@ const Profile = () => {
               </h2>
 
               <button
-                onClick={() => setEditing(!editing)}
+                onClick={() => {
+                  setEditingProfile(!editingProfile);
+                  setProfileMessage("");
+                }}
                 className="bg-[#8B1E3F] text-white px-5 py-2 rounded-xl"
               >
-                {editing ? "Cancel" : "Edit"}
+                {editingProfile ? "Cancel" : "Edit"}
               </button>
 
             </div>
 
-            <div className="space-y-6">
+            <form onSubmit={updateProfile} className="space-y-6">
 
               <div>
                 <label>Name</label>
 
                 <input
-                  disabled={!editing}
+                  disabled={!editingProfile}
                   name="name"
                   value={formData.name}
-                  onChange={handleChange}
+                  onChange={handleProfileChange}
                   className="w-full border p-3 rounded-xl mt-2"
                 />
               </div>
@@ -145,15 +266,15 @@ const Profile = () => {
                 <label>Phone</label>
 
                 <input
-                  disabled={!editing}
+                  disabled={!editingProfile}
                   name="phone"
                   value={formData.phone}
-                  onChange={handleChange}
+                  onChange={handleProfileChange}
                   className="w-full border p-3 rounded-xl mt-2"
                 />
               </div>
 
-              {editing && (
+              {editingProfile && (
                 <>
                   <div>
                     <label>New Password</label>
@@ -162,13 +283,14 @@ const Profile = () => {
                       type="password"
                       name="password"
                       value={formData.password}
-                      onChange={handleChange}
+                      onChange={handleProfileChange}
+                      placeholder="Leave blank to keep current"
                       className="w-full border p-3 rounded-xl mt-2"
                     />
                   </div>
 
                   <button
-                    onClick={updateProfile}
+                    type="submit"
                     className="bg-[#C9A227] text-white px-8 py-3 rounded-xl"
                   >
                     Save Changes
@@ -176,7 +298,13 @@ const Profile = () => {
                 </>
               )}
 
-            </div>
+              {profileMessage && (
+                <p className={`text-sm ${profileMessage.includes("success") ? "text-green-600" : "text-red-600"}`}>
+                  {profileMessage}
+                </p>
+              )}
+
+            </form>
 
           </div>
 
@@ -184,49 +312,227 @@ const Profile = () => {
 
           <div className="bg-white rounded-3xl shadow-lg p-8 mt-10">
 
-            <h2 className="text-2xl font-semibold mb-6">
-              Saved Addresses
-            </h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-semibold">
+                Saved Addresses
+              </h2>
 
-            {user.addresses.length === 0 ? (
+              {!showAddressForm && (
+                <button
+                  onClick={() => {
+                    setShowAddressForm(true);
+                    setEditingAddressId(null);
+                    setAddressForm({ ...emptyAddress });
+                    setAddressMessage("");
+                  }}
+                  className="bg-[#8B1E3F] text-white px-5 py-2 rounded-xl"
+                >
+                  + Add Address
+                </button>
+              )}
+            </div>
+
+            {addressMessage && (
+              <p className={`text-sm mb-4 ${addressMessage.includes("success") ? "text-green-600" : "text-red-600"}`}>
+                {addressMessage}
+              </p>
+            )}
+
+            {showAddressForm && (
+              <form onSubmit={handleAddressSubmit} className="border rounded-2xl p-6 mb-6 bg-gray-50">
+                <h3 className="text-lg font-semibold mb-4">
+                  {editingAddressId ? "Edit Address" : "Add New Address"}
+                </h3>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Label</label>
+                    <select
+                      name="label"
+                      value={addressForm.label}
+                      onChange={handleAddressChange}
+                      className="w-full border p-3 rounded-xl"
+                    >
+                      <option value="Home">Home</option>
+                      <option value="Work">Work</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Phone *</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={addressForm.phone}
+                      onChange={handleAddressChange}
+                      className="w-full border p-3 rounded-xl"
+                      required
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium mb-1">Address Line 1 *</label>
+                    <input
+                      type="text"
+                      name="line1"
+                      value={addressForm.line1}
+                      onChange={handleAddressChange}
+                      className="w-full border p-3 rounded-xl"
+                      required
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium mb-1">Address Line 2</label>
+                    <input
+                      type="text"
+                      name="line2"
+                      value={addressForm.line2}
+                      onChange={handleAddressChange}
+                      className="w-full border p-3 rounded-xl"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">City *</label>
+                    <input
+                      type="text"
+                      name="city"
+                      value={addressForm.city}
+                      onChange={handleAddressChange}
+                      className="w-full border p-3 rounded-xl"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">State *</label>
+                    <input
+                      type="text"
+                      name="state"
+                      value={addressForm.state}
+                      onChange={handleAddressChange}
+                      className="w-full border p-3 rounded-xl"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Pincode *</label>
+                    <input
+                      type="text"
+                      name="pincode"
+                      value={addressForm.pincode}
+                      onChange={handleAddressChange}
+                      className="w-full border p-3 rounded-xl"
+                      required
+                    />
+                  </div>
+
+                  <div className="flex items-end">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="isDefault"
+                        checked={addressForm.isDefault}
+                        onChange={(e) =>
+                          setAddressForm({
+                            ...addressForm,
+                            isDefault: e.target.checked,
+                          })
+                        }
+                        className="w-4 h-4"
+                      />
+                      <span className="text-sm">Set as default address</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 mt-6">
+                  <button
+                    type="submit"
+                    disabled={addressLoading}
+                    className="bg-[#8B1E3F] text-white px-6 py-3 rounded-xl hover:bg-[#6f1732] transition disabled:opacity-50"
+                  >
+                    {addressLoading ? "Saving..." : editingAddressId ? "Update Address" : "Add Address"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={cancelAddressForm}
+                    className="border border-gray-300 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-50 transition"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {user.addresses.length === 0 && !showAddressForm ? (
               <p className="text-gray-500">
                 No Address Added
               </p>
             ) : (
-              user.addresses.map((addr, index) => (
-                <div
-                  key={index}
-                  className="border rounded-xl p-5 mb-5"
-                >
-                  <h3 className="font-semibold text-lg">
-                    {addr.label}
-                  </h3>
+              <div className="space-y-4">
+                {user.addresses.map((addr) => (
+                  <div
+                    key={addr._id}
+                    className="border rounded-xl p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h3 className="font-semibold text-lg">
+                          {addr.label}
+                        </h3>
+                        {addr.isDefault && (
+                          <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs">
+                            Default Address
+                          </span>
+                        )}
+                      </div>
 
-                  <p>{addr.line1}</p>
+                      <p>{addr.line1}</p>
 
-                  {addr.line2 && <p>{addr.line2}</p>}
+                      {addr.line2 && <p>{addr.line2}</p>}
 
-                  <p>
-                    {addr.city}, {addr.state}
-                  </p>
+                      <p>
+                        {addr.city}, {addr.state}
+                      </p>
 
-                  <p>{addr.pincode}</p>
+                      <p>{addr.pincode}</p>
 
-                  <p>{addr.phone}</p>
+                      <p>Phone: {addr.phone}</p>
+                    </div>
 
-                  {addr.isDefault && (
-                    <span className="inline-block mt-3 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
-                      Default Address
-                    </span>
-                  )}
+                    <div className="flex flex-wrap gap-2">
+                      {!addr.isDefault && (
+                        <button
+                          onClick={() => handleSetDefault(addr._id)}
+                          className="border border-[#8B1E3F] text-[#8B1E3F] px-4 py-2 rounded-xl hover:bg-[#8B1E3F] hover:text-white transition text-sm"
+                        >
+                          Set Default
+                        </button>
+                      )}
 
-                </div>
-              ))
+                      <button
+                        onClick={() => handleEditAddress(addr)}
+                        className="border border-gray-300 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-50 transition text-sm"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        onClick={() => handleDeleteAddress(addr._id)}
+                        className="border border-red-500 text-red-600 px-4 py-2 rounded-xl hover:bg-red-50 transition text-sm"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
-
-            <button className="mt-5 bg-[#8B1E3F] text-white px-6 py-3 rounded-xl">
-              + Add Address
-            </button>
 
           </div>
 

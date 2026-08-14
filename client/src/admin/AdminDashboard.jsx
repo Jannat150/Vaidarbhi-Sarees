@@ -13,10 +13,12 @@ const AdminDashboard = () => {
     newOrders: 0,
     totalRevenue: 0,
   });
+  const [recentOrders, setRecentOrders] = useState([]);
 
   useEffect(() => {
     fetchUsers();
     fetchStats();
+    fetchRecentOrders();
   }, []);
 
   const fetchUsers = async () => {
@@ -38,7 +40,16 @@ const AdminDashboard = () => {
   } catch (err) {
     console.log("Stats Error:", err.response || err);
   }
-};
+  };
+
+  const fetchRecentOrders = async () => {
+    try {
+      const { data } = await API.get("/orders");
+      setRecentOrders(data.slice(0, 10));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -138,18 +149,31 @@ const AdminDashboard = () => {
               </p>
             </div>
 
-            <div
-              onClick={() => navigate("/admin/products")}
-              className="cursor-pointer bg-[#C9A227] text-white rounded-2xl p-8 shadow-lg hover:scale-105 transition"
-            >
-              <h2 className="text-2xl font-bold">
-                🛍 Manage Products
-              </h2>
+             <div
+               onClick={() => navigate("/admin/contacts")}
+               className="cursor-pointer bg-orange-600 text-white rounded-2xl p-8 shadow-lg hover:scale-105 transition"
+             >
+               <h2 className="text-2xl font-bold">
+                 💬 Messages
+               </h2>
 
-              <p className="mt-4">
-                Edit or delete products.
-              </p>
-            </div>
+               <p className="mt-4">
+                 View and reply to customer messages.
+               </p>
+             </div>
+
+             <div
+               onClick={() => navigate("/admin/products")}
+               className="cursor-pointer bg-[#C9A227] text-white rounded-2xl p-8 shadow-lg hover:scale-105 transition"
+             >
+               <h2 className="text-2xl font-bold">
+                 🛍 Manage Products
+               </h2>
+
+               <p className="mt-4">
+                 Edit or delete products.
+               </p>
+             </div>
 
 
           </div>
@@ -245,6 +269,151 @@ const AdminDashboard = () => {
                           className="bg-[#8B1E3F] text-white px-4 py-2 rounded-lg hover:bg-[#6f1732]"
                         >
                           View Orders
+                        </button>
+
+                      </td>
+
+                    </tr>
+
+                  ))
+
+                )}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+          {/* Recent Orders */}
+
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden mt-12">
+
+            <div className="bg-[#8B1E3F] text-white px-6 py-4 flex justify-between items-center">
+
+              <h2 className="text-2xl font-bold">
+                Recent Orders
+              </h2>
+
+              <button
+                onClick={() => navigate("/admin/orders")}
+                className="text-sm bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg transition"
+              >
+                View All
+              </button>
+
+            </div>
+
+            <table className="w-full">
+
+              <thead className="bg-gray-100">
+
+                <tr>
+
+                  <th className="p-4 text-left">
+                    Order ID
+                  </th>
+
+                  <th>Customer</th>
+
+                  <th>Total</th>
+
+                  <th>Payment</th>
+
+                  <th>Status</th>
+
+                  <th className="text-center">
+                    Actions
+                  </th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {recentOrders.length === 0 ? (
+
+                  <tr>
+
+                    <td
+                      colSpan={6}
+                      className="text-center py-10"
+                    >
+                      No Orders Found
+                    </td>
+
+                  </tr>
+
+                ) : (
+
+                  recentOrders.map((order) => (
+
+                    <tr
+                      key={order._id}
+                      className="border-b hover:bg-gray-50"
+                    >
+
+                      <td className="p-4 font-semibold">
+                        {order._id}
+                      </td>
+
+                      <td>
+                        {order.user?.name || "-"}
+                      </td>
+
+                      <td>
+                        ₹{order.totalAmount}
+                      </td>
+
+                      <td>
+                        <span className="capitalize text-sm">
+                          {order.paymentMethod === "razorpay"
+                            ? "Online / Razorpay"
+                            : order.paymentMethod === "cod"
+                            ? "COD"
+                            : order.paymentMethod || "-"}
+                        </span>{" "}
+                        <span
+                          className={`px-2 py-1 rounded-full text-white text-xs ${
+                            order.paymentStatus === "paid"
+                              ? "bg-green-500"
+                              : order.paymentStatus === "pending"
+                              ? "bg-yellow-500"
+                              : "bg-red-500"
+                          }`}
+                        >
+                          {order.paymentStatus}
+                        </span>
+                      </td>
+
+                      <td>
+                        <span
+                          className={`px-3 py-1 rounded-full text-white text-sm ${
+                            order.orderStatus === "placed"
+                              ? "bg-blue-500"
+                              : order.orderStatus === "processing"
+                              ? "bg-orange-500"
+                              : order.orderStatus === "shipped"
+                              ? "bg-purple-500"
+                              : order.orderStatus === "delivered"
+                              ? "bg-green-600"
+                              : "bg-red-600"
+                          }`}
+                        >
+                          {order.orderStatus}
+                        </span>
+                      </td>
+
+                      <td className="text-center">
+
+                        <button
+                          onClick={() =>
+                            navigate(`/admin/orders/${order._id}`)
+                          }
+                          className="bg-[#8B1E3F] text-white px-4 py-2 rounded-lg hover:bg-[#6f1732]"
+                        >
+                          View Details
                         </button>
 
                       </td>

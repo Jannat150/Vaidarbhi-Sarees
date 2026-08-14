@@ -21,8 +21,21 @@ export const getProducts = async (req, res) => {
 
     const query = {};
 
-    if (keyword) {
-      query.$text = { $search: keyword };
+    if (keyword && keyword.trim().length >= 2) {
+      const words = keyword.trim().split(/\s+/).map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).filter(Boolean);
+      const regex = new RegExp(`\\b(${words.join("|")})`, "i");
+
+      query.$or = [
+        { name: regex },
+        { description: regex },
+        { fabric: regex },
+        { tags: regex },
+        { category: regex },
+        { region: regex },
+        { workType: regex },
+        { occasion: regex },
+        { color: regex },
+      ];
     }
     if (fabric) query.fabric = fabric;
     if (occasion) query.occasion = occasion;

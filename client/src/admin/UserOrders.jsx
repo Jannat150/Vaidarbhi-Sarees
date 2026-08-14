@@ -39,7 +39,7 @@ const UserOrders = () => {
 
               <div
                 key={order._id}
-                className="bg-white rounded-2xl shadow-lg p-6 flex justify-between items-center"
+                className="bg-white rounded-2xl shadow-lg p-6 flex flex-wrap justify-between items-center gap-4"
               >
 
                 <div>
@@ -49,11 +49,42 @@ const UserOrders = () => {
                   </p>
 
                   <p>
+                    <strong>User:</strong> {order.user?.name || "-"}
+                  </p>
+
+                  <p>
                     <strong>Total:</strong> ₹{order.totalAmount}
                   </p>
 
                   <p>
+                    <strong>Payment:</strong>{" "}
+                    <span className="capitalize">
+                      {order.paymentMethod === "razorpay"
+                        ? "Online / Razorpay"
+                        : order.paymentMethod === "cod"
+                        ? "Cash on Delivery"
+                        : order.paymentMethod || "-"}
+                    </span>{" "}
+                    •{" "}
+                    <span
+                      className={`px-2 py-1 rounded-full text-white text-xs ${
+                        order.paymentStatus === "paid"
+                          ? "bg-green-500"
+                          : order.paymentStatus === "pending"
+                          ? "bg-yellow-500"
+                          : "bg-red-500"
+                      }`}
+                    >
+                      {order.paymentStatus}
+                    </span>
+                  </p>
+
+                  <p>
                     <strong>Status:</strong> {order.orderStatus}
+                  </p>
+
+                  <p className="text-sm text-gray-500">
+                    {new Date(order.createdAt).toLocaleString()}
                   </p>
 
                 </div>

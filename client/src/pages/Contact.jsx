@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FiMapPin,
   FiPhone,
@@ -9,14 +9,29 @@ import {
 } from "react-icons/fi";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { createContact } from "../services/axios";
+import { useAuth } from "../context/AuthContext";
 
 const Contact = () => {
+  const { user } = useAuth();
   const [form, setForm] = useState({
-    name: "",
-    email: "",
+    name: user?.name || "",
+    email: user?.email || "",
     subject: "",
     message: "",
   });
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setForm((prev) => ({
+        ...prev,
+        name: user.name || prev.name,
+        email: user.email || prev.email,
+      }));
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     setForm({
@@ -25,17 +40,27 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    alert("Thank you! Your message has been sent.");
+    try {
+      setLoading(true);
 
-    setForm({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
+      await createContact(form);
+
+      alert("Thank you! Your message has been sent.");
+      setForm({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+    } catch (err) {
+      console.log(err);
+      alert(err.response?.data?.message || "Failed to send message");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -201,9 +226,10 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-[#8B1E3F] text-white py-4 rounded-xl hover:bg-[#701632] transition"
+                  disabled={loading}
+                  className="w-full bg-[#8B1E3F] text-white py-4 rounded-xl hover:bg-[#701632] transition disabled:opacity-50"
                 >
-                  Send Message
+                  {loading ? "Sending..." : "Send Message"}
                 </button>
 
               </form>

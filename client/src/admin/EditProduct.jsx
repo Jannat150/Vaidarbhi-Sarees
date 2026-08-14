@@ -18,12 +18,10 @@ const EditProduct = () => {
     discountPrice: "",
     fabric: "",
     occasion: "",
-    workType: "",
     color: "",
-    region: "",
+    sareeLength: "",
     blouseIncluded: false,
     blouseType: "none",
-    stock: "",
     tags: "",
     isFeatured: false,
     images: [],
@@ -173,14 +171,6 @@ const EditProduct = () => {
           />
 
           <input
-            name="workType"
-            value={product.workType}
-            onChange={handleChange}
-            placeholder="Work Type"
-            className="border p-3 rounded-xl"
-          />
-
-          <input
             name="color"
             value={product.color}
             onChange={handleChange}
@@ -189,19 +179,10 @@ const EditProduct = () => {
           />
 
           <input
-            name="region"
-            value={product.region}
+            name="sareeLength"
+            value={product.sareeLength}
             onChange={handleChange}
-            placeholder="Region"
-            className="border p-3 rounded-xl"
-          />
-
-          <input
-            type="number"
-            name="stock"
-            value={product.stock}
-            onChange={handleChange}
-            placeholder="Stock"
+            placeholder="Saree Length (e.g., 5.5m, 6m)"
             className="border p-3 rounded-xl"
           />
 

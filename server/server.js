@@ -12,6 +12,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import wishlistRoutes from "./routes/wishlistRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
@@ -54,6 +55,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/contacts", contactRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
