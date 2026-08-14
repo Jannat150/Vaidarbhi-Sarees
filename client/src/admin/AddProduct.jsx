@@ -18,12 +18,10 @@ const AddProduct = () => {
     discountPrice: "",
     fabric: "",
     occasion: "",
-    workType: "",
     color: "",
-    region: "",
+    sareeLength: "",
     blouseIncluded: false,
     blouseType: "none",
-    stock: "",
     tags: "",
     isFeatured: false,
   });
@@ -135,13 +133,6 @@ const AddProduct = () => {
           />
 
           <input
-            name="workType"
-            placeholder="Work Type"
-            onChange={handleChange}
-            className="border p-3 rounded-xl"
-          />
-
-          <input
             name="color"
             placeholder="Color"
             onChange={handleChange}
@@ -150,19 +141,10 @@ const AddProduct = () => {
           />
 
           <input
-            name="region"
-            placeholder="Region"
+            name="sareeLength"
+            placeholder="Saree Length (e.g., 5.5m, 6m)"
             onChange={handleChange}
             className="border p-3 rounded-xl"
-          />
-
-          <input
-            name="stock"
-            placeholder="Stock"
-            type="number"
-            onChange={handleChange}
-            className="border p-3 rounded-xl"
-            required
           />
 
           <select

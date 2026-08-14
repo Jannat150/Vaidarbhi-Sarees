@@ -47,15 +47,14 @@ const ProductDetails = () => {
     if (existingProduct) {
       existingProduct.quantity += 1;
     } else {
-      cart.push({
-        _id: product._id,
-        name: product.name,
-        price: product.price,
-        discountPrice: product.discountPrice,
-        images: product.images,
-        stock: product.stock,
-        quantity: 1,
-      });
+    cart.push({
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      discountPrice: product.discountPrice,
+      images: product.images,
+      quantity: 1,
+    });
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -119,10 +118,8 @@ const ProductDetails = () => {
             <div className="mt-6 space-y-2 text-lg">
               <p><strong>Fabric:</strong> {product.fabric}</p>
               <p><strong>Occasion:</strong> {product.occasion}</p>
-              <p><strong>Work Type:</strong> {product.workType}</p>
-              <p><strong>Region:</strong> {product.region}</p>
               <p><strong>Color:</strong> {product.color}</p>
-              <p><strong>Stock:</strong> {product.stock}</p>
+              <p><strong>Saree Length:</strong> {product.sareeLength || "N/A"}</p>
             </div>
 
             <div className="mt-8 flex items-center gap-4">
@@ -134,6 +131,10 @@ const ProductDetails = () => {
 
                   <span className="text-2xl text-gray-400 line-through">
                     ₹{product.price}
+                  </span>
+
+                  <span className="bg-red-100 text-red-600 text-sm font-bold px-3 py-1 rounded-full">
+                    {Math.round(((product.price - product.discountPrice) / product.price) * 100)}% OFF
                   </span>
                 </>
               ) : (

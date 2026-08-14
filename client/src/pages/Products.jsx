@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import API from "../services/axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -7,10 +7,16 @@ import Footer from "../components/Footer";
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get("keyword") || "";
 
   const fetchProducts = async () => {
     try {
-      const { data } = await API.get("/products");
+      const params = {};
+      if (keyword.trim()) {
+        params.keyword = keyword.trim();
+      }
+      const { data } = await API.get("/products", { params });
       setProducts(data.products);
     } catch (err) {
       console.log(err);
@@ -22,7 +28,7 @@ const Products = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [keyword]);
 
   return (
     <>
@@ -32,9 +38,15 @@ const Products = () => {
 
         <div className="max-w-7xl mx-auto">
 
-          <h1 className="text-4xl font-bold text-[#8B1E3F] mb-10">
-            Our Saree Collection
+          <h1 className="text-4xl font-bold text-[#8B1E3F] mb-2">
+            {keyword ? `Search Results for "${keyword}"` : "Our Saree Collection"}
           </h1>
+
+          {keyword && (
+            <p className="text-gray-600 mb-6">
+              Showing {products.length} result{products.length !== 1 ? "s" : ""} for "{keyword}"
+            </p>
+          )}
 
           {loading ? (
             <div className="text-center text-xl">
@@ -89,11 +101,11 @@ const Products = () => {
                     </div>
 
                     <Link
-  to={`/product/${product.slug}`}
-  className="block mt-5 bg-[#8B1E3F] text-white text-center py-3 rounded-xl hover:bg-[#6d1731]"
->
-  View Details
-</Link>
+                      to={`/product/${product.slug}`}
+                      className="block mt-5 bg-[#8B1E3F] text-white text-center py-3 rounded-xl hover:bg-[#6d1731]"
+                    >
+                      View Details
+                    </Link>
 
                   </div>
                 </div>

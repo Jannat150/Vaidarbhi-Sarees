@@ -11,9 +11,8 @@ const productSchema = new mongoose.Schema(
     // Saree-specific attributes
     fabric: { type: String, required: true }, // Silk, Cotton, Georgette, etc.
     occasion: { type: String }, // Wedding, Festive, Casual, Party
-    workType: { type: String }, // Zari, Embroidery, Printed, Handloom
     color: { type: String, required: true },
-    region: { type: String }, // Banarasi, Kanjeevaram, Bandhani
+    sareeLength: { type: String }, // e.g., 5.5m, 6m, etc.
 
     blouseIncluded: { type: Boolean, default: false },
     blouseType: {
@@ -25,7 +24,6 @@ const productSchema = new mongoose.Schema(
     images: [{ type: String, required: true }], // Cloudinary URLs
     video: { type: String },
 
-    stock: { type: Number, required: true, default: 0 },
     sku: { type: String, unique: true },
     category: { type: String, default: "saree" },
     tags: [{ type: String }],

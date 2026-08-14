@@ -35,7 +35,6 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    // Check stock
     for (const item of items) {
       const product = await Product.findById(item.product);
 
@@ -44,21 +43,6 @@ export const createOrder = async (req, res) => {
           message: "Product not found",
         });
       }
-
-      if (product.stock < item.quantity) {
-        return res.status(400).json({
-          message: `${product.name} is out of stock`,
-        });
-      }
-    }
-
-    // Reduce stock
-    for (const item of items) {
-      const product = await Product.findById(item.product);
-
-      product.stock -= item.quantity;
-
-      await product.save();
     }
 
     const order = await Order.create({
@@ -175,7 +159,6 @@ export const verifyRazorpayPayment = async (req, res) => {
       return res.status(400).json({ message: "Payment details missing" });
     }
 
-    // Verify signature
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -186,29 +169,15 @@ export const verifyRazorpayPayment = async (req, res) => {
       return res.status(400).json({ message: "Invalid payment signature" });
     }
 
-    // Check stock
     if (items && items.length > 0) {
       for (const item of items) {
         const product = await Product.findById(item.product);
         if (!product) {
           return res.status(404).json({ message: "Product not found" });
         }
-        if (product.stock < item.quantity) {
-          return res.status(400).json({ message: `${product.name} is out of stock` });
-        }
-      }
-
-      // Reduce stock
-      for (const item of items) {
-        const product = await Product.findById(item.product);
-        if (product) {
-          product.stock -= item.quantity;
-          await product.save();
-        }
       }
     }
 
-    // Create Order
     const order = await Order.create({
       user: req.user._id,
       items,
@@ -386,21 +355,6 @@ export const cancelOrder = async (req, res) => {
       return res.status(400).json({
         message: "Order already cancelled",
       });
-    }
-
-    // Restore stock
-    for (const item of order.items) {
-
-      const product = await Product.findById(item.product);
-
-      if (product) {
-
-        product.stock += item.quantity;
-
-        await product.save();
-
-      }
-
     }
 
     order.orderStatus = "cancelled";

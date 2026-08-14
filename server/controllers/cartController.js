@@ -7,7 +7,7 @@ import Product from "../models/Product.js";
 export const getCart = async (req, res) => {
   let cart = await Cart.findOne({ user: req.user._id }).populate(
     "items.product",
-    "name images price stock slug"
+    "name images price discountPrice slug"
   );
   if (!cart) {
     cart = await Cart.create({ user: req.user._id, items: [] });
@@ -39,7 +39,7 @@ export const addToCart = async (req, res) => {
   }
 
   await cart.save();
-  const populatedCart = await cart.populate("items.product", "name images price stock slug");
+  const populatedCart = await cart.populate("items.product", "name images price discountPrice slug");
   res.status(201).json(populatedCart);
 };
 
@@ -60,7 +60,7 @@ export const updateCartItem = async (req, res) => {
 
   item.quantity = quantity;
   await cart.save();
-  const populatedCart = await cart.populate("items.product", "name images price stock slug");
+  const populatedCart = await cart.populate("items.product", "name images price discountPrice slug");
   res.json(populatedCart);
 };
 
@@ -75,6 +75,6 @@ export const removeFromCart = async (req, res) => {
 
   cart.items = cart.items.filter((item) => item.product.toString() !== req.params.productId);
   await cart.save();
-  const populatedCart = await cart.populate("items.product", "name images price stock slug");
+  const populatedCart = await cart.populate("items.product", "name images price discountPrice slug");
   res.json(populatedCart);
 };

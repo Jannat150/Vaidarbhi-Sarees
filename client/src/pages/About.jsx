@@ -297,11 +297,6 @@ const About = () => {
 
           <div className="max-w-5xl mx-auto px-6 text-center">
 
-            <img
-              src={logo}
-              alt="Logo"
-              className="w-28 mx-auto mb-8 rounded-full"
-            />
 
             <h2 className="text-4xl font-bold mb-6">
               Our Mission

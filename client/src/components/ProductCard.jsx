@@ -2,18 +2,24 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiHeart, FiShoppingCart } from "react-icons/fi";
 import API from "../services/axios";
+import { useAuth } from "../context/AuthContext";
 
 const ProductCard = ({ product }) => {
   const [loading, setLoading] = useState(false);
+  const [wishlisted, setWishlisted] = useState(false);
+  const { user } = useAuth();
 
   const addToWishlist = async () => {
     try {
       setLoading(true);
-      await API.post("/wishlist", { productId: product._id });
+      const { data } = await API.post("/wishlist", { productId: product._id });
+      setWishlisted(true);
+      setTimeout(() => setWishlisted(false), 2000);
       alert("Added to wishlist");
     } catch (err) {
-      console.error(err);
-      alert("Failed to add to wishlist");
+      console.error("Add to wishlist error:", err);
+      const message = err.response?.data?.message || "Failed to add to wishlist";
+      alert(message);
     } finally {
       setLoading(false);
     }
@@ -40,9 +46,14 @@ const ProductCard = ({ product }) => {
           </span>
 
           {product.discountPrice && (
-            <span className="line-through text-gray-400">
-              ₹{product.price}
-            </span>
+            <>
+              <span className="line-through text-gray-400">
+                ₹{product.price}
+              </span>
+              <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded-full">
+                {Math.round(((product.price - product.discountPrice) / product.price) * 100)}% OFF
+              </span>
+            </>
           )}
         </div>
 
@@ -55,13 +66,27 @@ const ProductCard = ({ product }) => {
             Cart
           </Link>
 
-          <button
-            onClick={addToWishlist}
-            disabled={loading}
-            className="border border-[#8B1E3F] p-3 rounded-full disabled:opacity-60 hover:bg-[#8B1E3F] hover:text-white transition"
-          >
-            <FiHeart />
-          </button>
+          {user ? (
+            <button
+              type="button"
+              onClick={addToWishlist}
+              disabled={loading}
+              className={`border p-3 rounded-full transition ${
+                wishlisted
+                  ? "bg-[#8B1E3F] text-white border-[#8B1E3F]"
+                  : "border-[#8B1E3F] hover:bg-[#8B1E3F] hover:text-white"
+              } disabled:opacity-60`}
+            >
+              <FiHeart />
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="border border-[#8B1E3F] p-3 rounded-full hover:bg-[#8B1E3F] hover:text-white transition"
+            >
+              <FiHeart />
+            </Link>
+          )}
         </div>
       </div>
     </div>

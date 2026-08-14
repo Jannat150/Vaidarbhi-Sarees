@@ -121,6 +121,20 @@ const MyOrders = () => {
 
                   <div>
                     <p className="font-semibold">
+                      Method
+                    </p>
+
+                    <span className="text-sm text-gray-700 capitalize">
+                      {order.paymentMethod === "razorpay"
+                        ? "Online / Razorpay"
+                        : order.paymentMethod === "cod"
+                        ? "Cash on Delivery"
+                        : order.paymentMethod || "-"}
+                    </span>
+                  </div>
+
+                  <div>
+                    <p className="font-semibold">
                       Status
                     </p>
 
@@ -208,18 +222,16 @@ const MyOrders = () => {
 
                   <div className="text-gray-700 space-y-1">
 
-                    <p>{order.shippingAddress.name}</p>
-
-                    <p>{order.shippingAddress.address}</p>
+                    <p>{order.shippingAddress?.line1}</p>
 
                     <p>
-                      {order.shippingAddress.city},{" "}
-                      {order.shippingAddress.state}
+                      {order.shippingAddress?.city},{" "}
+                      {order.shippingAddress?.state}
                     </p>
 
-                    <p>{order.shippingAddress.pincode}</p>
+                    <p>{order.shippingAddress?.pincode}</p>
 
-                    <p>{order.shippingAddress.phone}</p>
+                    <p>{order.shippingAddress?.phone}</p>
 
                   </div>
 
