@@ -193,31 +193,31 @@ const Navbar = () => {
               </button>
 
               {searchOpen && (
-                <div className="absolute right-0 top-full mt-3 w-[92vw] sm:w-[460px] bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-gray-200/80 overflow-hidden z-50">
+                <div className="absolute right-0 top-full mt-3 w-screen max-w-none sm:max-w-[420px] md:max-w-[460px] bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/80 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   {/* Search Input Area */}
-                  <form onSubmit={handleSearch} className="p-4">
-                    <div className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 border border-gray-200 focus-within:border-[#8B1E3F] focus-within:shadow-md transition-all">
-                      <FiSearch className="text-gray-400 text-lg shrink-0" />
+                  <form onSubmit={handleSearch} className="p-3 sm:p-4">
+                    <div className="flex items-center gap-2 sm:gap-3 bg-gray-50 rounded-xl px-3 sm:px-4 py-3 sm:py-3 border border-gray-200 focus-within:border-[#8B1E3F] focus-within:bg-white focus-within:shadow-md transition-all">
+                      <FiSearch className="text-gray-400 text-lg sm:text-lg shrink-0" />
                       <input
                         ref={searchInputRef}
                         type="text"
-                        placeholder="Search sarees, fabric, occasion..."
+                        placeholder="Search sarees..."
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
-                        className="flex-1 bg-transparent outline-none text-gray-800 placeholder:text-gray-400"
+                        className="flex-1 bg-transparent outline-none text-gray-800 placeholder:text-gray-400 text-base sm:text-base min-w-0"
                       />
                       {query && (
                         <button
                           type="button"
                           onClick={() => setQuery("")}
-                          className="text-gray-400 hover:text-gray-600 transition"
+                          className="text-gray-400 hover:text-gray-600 transition p-1"
                         >
                           <FiX />
                         </button>
                       )}
                       <button
                         type="submit"
-                        className="bg-[#8B1E3F] hover:bg-[#6f1732] text-white text-sm font-semibold px-5 py-2 rounded-xl transition-all shadow-md hover:shadow-lg"
+                        className="bg-[#8B1E3F] hover:bg-[#6f1732] text-white text-sm font-semibold px-4 sm:px-5 py-2.5 rounded-lg transition-all shadow-sm hover:shadow-md whitespace-nowrap"
                       >
                         Search
                       </button>
@@ -226,7 +226,7 @@ const Navbar = () => {
 
                   {/* Search History */}
                   {searchHistory.length > 0 && (
-                    <div className="px-4 pb-4">
+                    <div className="px-3 sm:px-4 pb-3 sm:pb-4">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                           <FiClock className="text-gray-400" />
@@ -241,20 +241,20 @@ const Navbar = () => {
                         </button>
                       </div>
 
-                      <div className="flex flex-col gap-1">
+                      <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
                         {searchHistory.map((term, index) => (
                           <button
                             key={`${term}-${index}`}
                             onClick={() => handleHistoryClick(term)}
-                            className="w-full text-left px-4 py-2.5 rounded-xl hover:bg-gray-50 transition flex items-center justify-between group"
+                            className="w-full text-left px-3 sm:px-4 py-3 sm:py-2.5 rounded-xl hover:bg-gray-50 transition flex items-center justify-between group"
                           >
-                            <div className="flex items-center gap-3 min-w-0">
+                            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                               <FiClock className="text-gray-300 group-hover:text-[#8B1E3F] transition shrink-0" />
                               <span className="text-sm text-gray-700 truncate">{term}</span>
                             </div>
                             <button
                               onClick={(e) => removeHistoryItem(term, e)}
-                              className="text-gray-300 hover:text-red-500 transition shrink-0"
+                              className="text-gray-300 hover:text-red-500 transition shrink-0 p-1"
                             >
                               <FiTrash2 />
                             </button>
@@ -265,7 +265,7 @@ const Navbar = () => {
                   )}
 
                   {!searchHistory.length && !query && (
-                    <div className="px-4 pb-4">
+                    <div className="px-3 sm:px-4 pb-3 sm:pb-4">
                       <p className="text-xs text-gray-400 text-center py-3">
                         Your recent searches will appear here
                       </p>
@@ -275,11 +275,11 @@ const Navbar = () => {
               )}
             </div>
 
-            <Link to="/wishlist" className="hover:text-[#8B1E3F] transition p-2 rounded-xl hover:bg-gray-100" aria-label="Wishlist">
+            <Link to="/wishlist" className="hover:text-[#8B1E3F] transition p-2 rounded-xl hover:bg-gray-100 hidden sm:flex" aria-label="Wishlist">
               <FiHeart />
             </Link>
 
-            <Link to="/cart" className="hover:text-[#8B1E3F] transition p-2 rounded-xl hover:bg-gray-100" aria-label="Cart">
+            <Link to="/cart" className="hover:text-[#8B1E3F] transition p-2 rounded-xl hover:bg-gray-100 hidden sm:flex" aria-label="Cart">
               <FiShoppingCart />
             </Link>
 
@@ -294,7 +294,7 @@ const Navbar = () => {
                 </button>
 
                 {open && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/80 overflow-hidden z-50">
+                  <div className="absolute right-0 mt-2 w-64 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/80 overflow-hidden z-50">
                     <div className="px-4 py-3 border-b bg-gray-50/80">
                       <p className="font-semibold text-gray-800 text-sm">{user.name}</p>
                       <p className="text-xs text-gray-500 truncate">{user.email}</p>

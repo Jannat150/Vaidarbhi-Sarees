@@ -101,26 +101,21 @@ const AdminOrderDetails = () => {
               Order Status
             </label>
 
-            <select
-              value={status}
-              onChange={(e) =>
-                setStatus(e.target.value)
-              }
-              className="w-full border p-3 rounded-xl mt-3"
-            >
-              <option value="placed">Placed</option>
-              <option value="processing">Processing</option>
-              <option value="shipped">Shipped</option>
-              <option value="out for delivery">
-                Out for Delivery
-              </option>
-              <option value="delivered">
-                Delivered
-              </option>
-              <option value="cancelled">
-                Cancelled
-              </option>
-            </select>
+             <select
+               value={status}
+               onChange={(e) =>
+                 setStatus(e.target.value)
+               }
+               className="w-full border p-3 rounded-xl mt-3"
+             >
+               <option value="placed">Placed</option>
+               <option value="pending">Pending</option>
+               <option value="processing">Processing</option>
+               <option value="shipped">Shipped</option>
+               <option value="out for delivery">Out for Delivery</option>
+               <option value="delivered">Delivered</option>
+               <option value="cancelled">Cancelled</option>
+             </select>
 
             <button
               onClick={updateStatus}

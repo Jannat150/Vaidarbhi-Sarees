@@ -32,7 +32,7 @@ const orderSchema = new mongoose.Schema(
     razorpaySignature: { type: String },
     orderStatus: {
       type: String,
-      enum: ["placed", "confirmed", "shipped", "delivered", "cancelled"],
+      enum: ["placed", "pending", "processing", "shipped", "out for delivery", "delivered", "cancelled"],
       default: "placed",
     },
     totalAmount: { type: Number, required: true },
